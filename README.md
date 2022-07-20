@@ -3,7 +3,7 @@ Program takes in video of squat and will check if the person performing the squa
 
 ## Technologies
 
-*Python 3.9
-*openCV 4.6.0
-*mediapipe 0.8.10
+* Python 3.9
+* openCV 4.6.0
+* mediapipe 0.8.10
 
