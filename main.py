@@ -11,6 +11,7 @@ cap = cv2.VideoCapture('squat2.mp4')
 if not cap.isOpened():
     print('Error opening video')
 
+# Initial width and height
 width = cap.get(3)
 height = cap.get(4)
 
@@ -18,10 +19,11 @@ height = cap.get(4)
 good = False
 
 # Resizes the video if it's too big
-if width > 600 or height > 800:
+if width > 300 or height > 400:
     width, height = utils.video_resize(cap)
-    cap = cv2.VideoCapture('resize.mp4')
+    cap = cv2.VideoCapture('resize.avi')
 
+# Creates output video
 out = cv2.VideoWriter('result.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 20, (width, height))
 
 # Plays Video
@@ -37,17 +39,24 @@ while cap.isOpened() and success:
     if side == 'Right':
         hip = lm_list[24]
         knee = lm_list[26]
+        ankle = lm_list[28]
     elif side == 'Left':
         hip = lm_list[23]
         knee = lm_list[25]
+        ankle = lm_list[27]
 
     if results.pose_landmarks:
-        # print(lm_list)
         # Checks for depth
         if hip[2] >= knee[2]:
             good = True
+
+        # Changes indicator from red to white if good lift
         utils.good_lift(frame, good)
-        # mpDraw.draw_landmarks(frame, results.pose_landmarks, mpPose.POSE_CONNECTIONS)
+
+        # Draw skeleton for the legs
+        utils.draw_skeleton(frame, hip, knee, ankle)
+
+        # Writes frame to output video
         out.write(frame)
 
     cv2.imshow("Frame", frame)
